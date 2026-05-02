@@ -214,6 +214,12 @@ Replays learned trajectories using pygame and shows:
 
 ```text
 IAS Project/
+├── README.md
+├── docs/
+│   ├── README.md
+│   ├── ARCHITECTURE.md
+│   ├── CONFIGURATION_GUIDE.md
+│   └── QUICK_REFERENCE.md
 ├── config.py
 ├── environment.py
 ├── features.py
@@ -227,9 +233,17 @@ IAS Project/
 │   ├── sarsa_lambda.py
 │   └── lfa_sarsa.py
 ├── assets/
-├── requirements.txt
-└── documentation files
+└── requirements.txt
 ```
+
+## Documentation
+
+For a cleaner project root, detailed docs are grouped in `docs/`:
+
+- `docs/README.md` - navigation index for all docs
+- `docs/ARCHITECTURE.md` - system design and module interactions
+- `docs/CONFIGURATION_GUIDE.md` - all tuning parameters
+- `docs/QUICK_REFERENCE.md` - quick commands and troubleshooting
 
 ## How to Run
 
