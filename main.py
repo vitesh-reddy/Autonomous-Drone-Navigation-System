@@ -5,24 +5,15 @@ from visualization import visualize_records
 
 def build_episode_targets(episode_index, episode_pairs):
     primary_pickup, primary_drop = episode_pairs[episode_index % len(episode_pairs)]
-    secondary_pickup, secondary_drop = episode_pairs[(episode_index + 1) % len(episode_pairs)]
-    if (
-        (secondary_pickup == primary_pickup or secondary_drop == primary_drop)
-        and len(episode_pairs) > 2
-    ):
-        secondary_pickup, secondary_drop = episode_pairs[(episode_index + 2) % len(episode_pairs)]
-
     return [
         (primary_pickup, 0, 1),
-        (primary_drop, 1, 0),
-        (secondary_pickup, 0, 1),
-        (secondary_drop, 1, 0)
+        (primary_drop, 1, 0)
     ]
 
 def simulate_episode(episode_index, episode_pairs):
     targets = build_episode_targets(episode_index, episode_pairs)
-    episode_pickups = [targets[0][0], targets[2][0]]
-    episode_drops = [targets[1][0], targets[3][0]]
+    episode_pickups = [targets[0][0]]
+    episode_drops = [targets[1][0]]
     
     path = []
     birds_traj = []
