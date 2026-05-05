@@ -39,8 +39,10 @@ def visualize_records(records, window_title="Drone Replay (Algorithm)", speed=10
     danger_surface = pygame.Surface((WINDOW_W, WINDOW_W), pygame.SRCALPHA)
 
     for rec in records:
-        pickups_visible = [True] * len(PICKUPS)
-        drops_visible = [True] * len(DROPS)
+        episode_pickups = rec.get("pickups", PICKUPS)
+        episode_drops = rec.get("drops", DROPS)
+        pickups_visible = [True] * len(episode_pickups)
+        drops_visible = [True] * len(episode_drops)
         prev_has = 0
 
         path = rec["path"]
@@ -79,11 +81,11 @@ def visualize_records(records, window_title="Drone Replay (Algorithm)", speed=10
                 screen.blit(bird_imgs[t], (sx_b, sy_b))
 
             # Draw items
-            for idx, p in enumerate(PICKUPS):
+            for idx, p in enumerate(episode_pickups):
                 if pickups_visible[idx]:
                     px, py = p
                     screen.blit(pickup_im, (px * CELL, WINDOW_W - (py + 1) * CELL + INFO_BAR))
-            for idx, p in enumerate(DROPS):
+            for idx, p in enumerate(episode_drops):
                 if drops_visible[idx]:
                     dx, dy = p
                     screen.blit(drop_im, (dx * CELL, WINDOW_W - (dy + 1) * CELL + INFO_BAR))
@@ -103,12 +105,12 @@ def visualize_records(records, window_title="Drone Replay (Algorithm)", speed=10
 
             # Toggle item visibility on pickup/drop
             if prev_has == 0 and has_pkg == 1:
-                for idx, p in enumerate(PICKUPS):
+                for idx, p in enumerate(episode_pickups):
                     if (x, y) == p and pickups_visible[idx]:
                         pickups_visible[idx] = False
                         break
             if prev_has == 1 and has_pkg == 0:
-                for idx, p in enumerate(DROPS):
+                for idx, p in enumerate(episode_drops):
                     if (x, y) == p and drops_visible[idx]:
                         drops_visible[idx] = False
                         break

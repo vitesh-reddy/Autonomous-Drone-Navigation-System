@@ -10,8 +10,8 @@ INFO_BAR = 40
 WINDOW_H = WINDOW_W + INFO_BAR
 
 # Locations
-PICKUPS = [(5, 5), (25, 10)]
-DROPS = [(2, 28), (28, 5)]
+PICKUPS = [(5, 5), (25, 10), (6, 22), (18, 15)]
+DROPS = [(2, 28), (28, 5), (23, 25), (10, 26)]
 
 # Actions
 ACTIONS = [

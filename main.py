@@ -3,14 +3,26 @@ import random
 from config import GRID_SIZE, PICKUPS, DROPS, NUM_BIRDS
 from visualization import visualize_records
 
-def create_episode(episode_index):
-    # waypoints
-    targets = [
-        (PICKUPS[0], 0, 1),
-        (DROPS[0], 1, 0),
-        (PICKUPS[1], 0, 1),
-        (DROPS[1], 1, 0)
+def build_episode_targets(episode_index, episode_pairs):
+    primary_pickup, primary_drop = episode_pairs[episode_index % len(episode_pairs)]
+    secondary_pickup, secondary_drop = episode_pairs[(episode_index + 1) % len(episode_pairs)]
+    if (
+        (secondary_pickup == primary_pickup or secondary_drop == primary_drop)
+        and len(episode_pairs) > 2
+    ):
+        secondary_pickup, secondary_drop = episode_pairs[(episode_index + 2) % len(episode_pairs)]
+
+    return [
+        (primary_pickup, 0, 1),
+        (primary_drop, 1, 0),
+        (secondary_pickup, 0, 1),
+        (secondary_drop, 1, 0)
     ]
+
+def simulate_episode(episode_index, episode_pairs):
+    targets = build_episode_targets(episode_index, episode_pairs)
+    episode_pickups = [targets[0][0], targets[2][0]]
+    episode_drops = [targets[1][0], targets[3][0]]
     
     path = []
     birds_traj = []
@@ -110,22 +122,27 @@ def create_episode(episode_index):
         "bird_types": [random.choice([0, 1]) for _ in range(NUM_BIRDS)],
         "reflex_flags": reflex_flags,
         "actions": [''] * len(path),
-        "immediate_rewards": [0.0] * len(path)
+        "immediate_rewards": [0.0] * len(path),
+        "pickups": episode_pickups,
+        "drops": episode_drops
     }
 
 def main(show_stats=False, show_replay=True, replay_speed=15):
     print("=" * 60)
-    print("IAS: Dynamic Hardcoded Dodge Demo")
+    print("IAS: Dynamic Dodge Demo")
     print("=" * 60)
     print("Generating dynamic episodes...")
-    
-    rec1 = create_episode(1)
-    rec2 = create_episode(2)
-    
-    records = [rec1, rec2]
+
+    episode_pairs = list(zip(PICKUPS, DROPS))
+    episode_count = min(4, len(episode_pairs))
+
+    records = [
+        simulate_episode(i + 1, episode_pairs)
+        for i in range(episode_count)
+    ]
 
     if show_replay:
-        print("\nReplaying Hardcoded Trajectories (Pygame Visualization)")
+        print("\nReplaying Scenario Trajectories (Pygame Visualization)")
         visualize_records(records, window_title="Dynamic Dodging Agent", speed=replay_speed)
 
     print("\n✓ Project Visualization Complete!")
